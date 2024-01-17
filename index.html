@@ -80,6 +80,53 @@
         color: #fff;
         margin-top: 10px;
       }
+
+      #hearts-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        overflow: hidden;
+      }
+
+      .heart {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background-color: #ff69b4;
+        clip-path: polygon(
+          50% 0%,
+          100% 35%,
+          75% 100%,
+          50% 70%,
+          25% 100%,
+          0% 35%
+        );
+        animation: fall 3s ease-out infinite;
+      }
+
+      @keyframes fall {
+        0% {
+          transform: translateY(0) rotate(0deg);
+        }
+        100% {
+          transform: translateY(100vh) rotate(360deg);
+        }
+      }
+
+      #loveMessage {
+        font-size: 24px;
+        margin-top: 10px;
+        display: none;
+      }
+
+      #countdown {
+        font-size: 18px;
+        margin-top: 10px;
+        display: none;
+      }
     </style>
   </head>
 
@@ -114,6 +161,9 @@
       <source src="mp3/flowersong1.mp3" type="audio/mp3" />
     </audio>
     <p id="songInfo"></p>
+    <div id="hearts-container"></div>
+    <div id="loveMessage">TE AMO</div>
+    <div id="countdown">Aguarde 30 segundos na página...</div>
 
     <script>
       document
@@ -135,20 +185,43 @@
       function playMusic() {
         const backgroundMusic = document.getElementById("backgroundMusic");
         const songInfo = document.getElementById("songInfo");
+        const heartsContainer = document.getElementById("hearts-container");
+        const loveMessage = document.getElementById("loveMessage");
+        const countdown = document.getElementById("countdown");
 
         // Atualiza a informação da música
         songInfo.textContent =
-          "Virtual Dj está tocando uma de nossas mil musicas: Planos - BK";
+          "Virtual Dj está tocando uma de nossas mil músicas: Planos - BK";
+
+        // Exibe os elementos adicionais
+        heartsContainer.style.display = "block";
+        loveMessage.style.display = "block";
+        countdown.style.display = "block";
 
         // Inicia a reprodução da música
         backgroundMusic.play();
 
-        // Aguarde 5 segundos antes de redirecionar para a próxima página
+        // Aguarde 30 segundos antes de redirecionar para a próxima página
         setTimeout(function () {
           // Adiciona um parâmetro de consulta à URL para indicar a reprodução da música
           window.location.href = "flower.html?musicPlaying=true";
-        }, 30000); // 5000 milissegundos = 5 segundos
+        }, 30000); // 30000 milissegundos = 30 segundos
       }
+
+      // Função para criar corações
+      function createHeart() {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.style.left = `${Math.random() * 100}vw`;
+        heart.style.backgroundColor = "red"; // Coração vermelho
+        document.getElementById("hearts-container").appendChild(heart);
+        setTimeout(() => {
+          heart.remove();
+        }, 3000);
+      }
+
+      // Cria um coração a cada segundo
+      setInterval(createHeart, 500);
     </script>
   </body>
 </html>
